@@ -1,0 +1,73 @@
+class AVLTreeNode:
+	def __init__(self, item, left=None, right=None):
+		self.item = item
+		self.left = left
+		self.right = right
+class AVLTree:
+	def __init__(self):
+		self.root = None
+	def reset(self):
+		self.__init__()
+	def is_empty(self):
+		return self.root is None
+	def search(self,item):
+		return self.search_aux(self.root,item)
+	def search_aux(self, current,item):
+		# base case: empty
+		if current is None:
+			raise KeyError("Item  not found")
+		# base case: found
+		elif item == current.item:
+			return True
+		elif item < current.item:
+			return self.search_aux(current.left, item)
+		# item> current.item
+		else:
+			return self.search_aux(current.right, item)
+	def insert(self, item):
+		self.root = self.insert_aux(self.root, item)
+	def insert_aux(self, current, item):
+		if current is None:
+			current = BinarySearchTreeNode(item)
+		elif item < current.item:
+			current.left = self.insert_aux(current.left, item)
+		elif item > current.item:
+			current.right = self.insert_aux(current.right, item)
+		return current
+	def search_print(self,item):
+		return self.search_print_aux(self.root,item)
+	def search_print_aux(self,current,item,string=""):
+		# base case: empty
+		if current is None:
+			print("Item  not found")
+		# base case: found
+		elif item == current.item:
+			string=string+str(current.item)
+			print(string)
+		elif item < current.item:
+			string=string+str(current.item)+'  -> '
+			self.search_print_aux(current.left, item,string)
+		elif item > current.item:
+			string=string+str(current.item) + '  -> '
+			self.search_print_aux(current.right, item,string)			
+	def print_in_order(self):
+		self.print_in_order_aux(self.root)
+	def print_in_order_aux(self,current):
+		if current is not None:
+			self.print_in_order_aux(current.left)
+			print(current.item)
+			self.print_in_order_aux(current.right)
+	def max_height(self):
+		print(self.max_height_aux(self.root))		
+	def max_height_aux(self,current, depth=0):
+		if current is None:
+			return depth
+		return max(self.max_height_aux(current.left, depth+1),self.max_height_aux(current.right, depth+1))
+if __name__ == '__main__':
+	tree=BinarySearchTree()
+	tree.insert(12)
+	tree.insert(20)
+	tree.insert(2)
+	tree.insert(100)
+	tree.search_print(10)
+	tree.max_height()
